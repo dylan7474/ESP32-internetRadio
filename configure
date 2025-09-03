@@ -17,7 +17,7 @@ check_pkg() {
   fi
 }
 
-check_cmd gcc
+check_cmd g++
 check_cmd sdl2-config
 check_cmd pkg-config
 
@@ -40,4 +40,6 @@ if [ ${#missing[@]} -ne 0 ]; then
   exit 1
 else
   echo "All required tools and libraries are available."
+  echo "Configuration complete. Run 'make' to build."
 fi
+
