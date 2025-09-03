@@ -69,7 +69,7 @@ iradio V6.13
 #include <Adafruit_SH110X.h>  //https://github.com/adafruit/Adafruit_SSD1306
 #include <WiFiManager.h>      //https://github.com/tzapu/WiFiManager
 #include <WiFi.h>
-#include <Audio.h>        //https://github.com/schreibfaul1/ESP32-audioI2S
+#include "I2SAudioPlayer.h"      // Alternative audio library using ESP8266Audio components
 #include <ArduinoJson.h>  //https://github.com/bblanchon/ArduinoJson
 #include <HTTPClient.h>   //
 #include <StreamUtils.h>
@@ -102,8 +102,8 @@ SimpleRotary ChannelSelector(25, 32, 2);  //channel
 #define MAX98357A_I2S_BCLK 17
 #define MAX98357A_I2S_LRC 16
 
-// Inialise audio instance
-Audio audio;
+// Initialise audio instance using the new I2S player
+I2SAudioPlayer audio;
 
 //Initialsise sound control variables
 int volume = 4;
