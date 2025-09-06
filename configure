@@ -67,7 +67,7 @@ if [ ${#missing[@]} -ne 0 ]; then
   echo "Install Arduino CLI from https://arduino.github.io/arduino-cli/latest/installation/"
   echo "Then run:"
   echo "  arduino-cli core install esp32:esp32"
-  echo "  arduino-cli lib install SimpleRotary \"Adafruit GFX Library\" Adafruit_SH110X WiFiManager ArduinoJson StreamUtils"
+  echo "  arduino-cli lib install SimpleRotary \"Adafruit GFX Library\" \"Adafruit SH110X\" WiFiManager ArduinoJson StreamUtils"
   echo "  arduino-cli lib install --git-url https://github.com/schreibfaul1/ESP32-audioI2S.git"
   exit 1
 else

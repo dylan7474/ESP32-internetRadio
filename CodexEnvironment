@@ -75,6 +75,8 @@ retry 5 5 arduino-cli lib install "ArduinoJson"
 retry 5 5 arduino-cli lib install "Adafruit SH110X"
 retry 5 5 arduino-cli lib install "WiFiManager"
 retry 5 5 arduino-cli lib install "SimpleRotary"
+retry 5 5 arduino-cli lib install "StreamUtils"
+retry 5 5 arduino-cli lib install --git-url https://github.com/schreibfaul1/ESP32-audioI2S.git
 
 echo "✅ Setup complete. Compile with:"
 echo "   arduino-cli compile --fqbn esp32:esp32:esp32 ESP32-internetRadio.ino"
