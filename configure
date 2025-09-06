@@ -18,6 +18,20 @@ check_lib() {
   fi
 }
 
+check_header() {
+  local header="$1"
+  local lib="$2"
+  if ! arduino-cli lib list --format json | grep -Fq "\"$header\""; then
+    if [ -n "$lib" ]; then
+      echo "Missing required library: $lib (provides $header)"
+      missing+=("$lib")
+    else
+      echo "Missing required header: $header"
+      missing+=("$header")
+    fi
+  fi
+}
+
 check_cmd arduino-cli
 check_cmd make
 
@@ -32,12 +46,13 @@ if command -v arduino-cli >/dev/null 2>&1; then
     "Adafruit GFX Library" \
     "Adafruit SH110X" \
     "WiFiManager" \
-    "ESP32-audioI2S" \
     "ArduinoJson" \
     "StreamUtils"
   do
     check_lib "$lib"
   done
+
+  check_header "Audio.h" "ESP32-audioI2S"
 else
   echo "arduino-cli not found; skipping core and library checks"
 fi
@@ -52,7 +67,8 @@ if [ ${#missing[@]} -ne 0 ]; then
   echo "Install Arduino CLI from https://arduino.github.io/arduino-cli/latest/installation/"
   echo "Then run:"
   echo "  arduino-cli core install esp32:esp32"
-  echo "  arduino-cli lib install SimpleRotary \"Adafruit GFX Library\" Adafruit_SH110X WiFiManager ESP32-audioI2S ArduinoJson StreamUtils"
+  echo "  arduino-cli lib install SimpleRotary \"Adafruit GFX Library\" Adafruit_SH110X WiFiManager ArduinoJson StreamUtils"
+  echo "  arduino-cli lib install --git-url https://github.com/schreibfaul1/ESP32-audioI2S.git"
   exit 1
 else
   echo "All required tools, cores and libraries are available."
