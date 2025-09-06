@@ -5,13 +5,17 @@ SKETCH_COPY=ESP32-internetRadio.ino
 BUILD_DIR=build
 BIN=$(BUILD_DIR)/$(SKETCH_COPY).bin
 
-.PHONY: build clean
+.PHONY: build clean check
 
-build:
+build: check
 	cp $(SKETCH) $(SKETCH_COPY)
+	mkdir -p $(BUILD_DIR)
 	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) $(SKETCH_COPY)
 	@echo "Firmware binary: $(BIN)"
 	rm $(SKETCH_COPY)
+
+check:
+	./configure
 
 clean:
 	rm -rf $(BUILD_DIR) $(SKETCH_COPY)
