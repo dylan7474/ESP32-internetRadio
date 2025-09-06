@@ -10,22 +10,51 @@ check_cmd() {
   fi
 }
 
-check_pkg() {
-  if ! pkg-config --exists "$1"; then
-    echo "Missing required library: $1"
-    missing+=("$1")
+check_lib() {
+  local lib="$1"
+  if ! grep -Fq "$lib" <<<"$lib_list"; then
+    echo "Missing required library: $lib"
+    missing+=("$lib")
   fi
 }
 
-check_cmd g++
-check_cmd sdl2-config
-check_cmd pkg-config
+check_header() {
+  local header="$1"
+  local lib="$2"
+  if ! arduino-cli lib list --format json | grep -Fq "\"$header\""; then
+    if [ -n "$lib" ]; then
+      echo "Missing required library: $lib (provides $header)"
+      missing+=("$lib")
+    else
+      echo "Missing required header: $header"
+      missing+=("$header")
+    fi
+  fi
+}
 
-if command -v pkg-config >/dev/null 2>&1; then
-  check_pkg SDL2_ttf
-  check_pkg fftw3
+check_cmd arduino-cli
+check_cmd make
+
+if command -v arduino-cli >/dev/null 2>&1; then
+  lib_list="$(arduino-cli lib list)"
+  if ! arduino-cli core list | grep -Fq 'esp32:esp32'; then
+    echo "Missing required core: esp32:esp32"
+    missing+=("esp32:esp32 core")
+  fi
+  for lib in \
+    "SimpleRotary" \
+    "Adafruit GFX Library" \
+    "Adafruit SH110X" \
+    "WiFiManager" \
+    "ArduinoJson" \
+    "StreamUtils"
+  do
+    check_lib "$lib"
+  done
+
+  check_header "Audio.h" "ESP32-audioI2S"
 else
-  echo "pkg-config not found; skipping library checks"
+  echo "arduino-cli not found; skipping core and library checks"
 fi
 
 if [ ${#missing[@]} -ne 0 ]; then
@@ -35,11 +64,13 @@ if [ ${#missing[@]} -ne 0 ]; then
     echo "  - $m"
   done
   echo
-  echo "Install them on Debian/Ubuntu with:"
-  echo "  sudo apt-get install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev pkg-config"
+  echo "Install Arduino CLI from https://arduino.github.io/arduino-cli/latest/installation/"
+  echo "Then run:"
+  echo "  arduino-cli core install esp32:esp32"
+  echo "  arduino-cli lib install SimpleRotary \"Adafruit GFX Library\" Adafruit_SH110X WiFiManager ArduinoJson StreamUtils"
+  echo "  arduino-cli lib install --git-url https://github.com/schreibfaul1/ESP32-audioI2S.git"
   exit 1
 else
-  echo "All required tools and libraries are available."
+  echo "All required tools, cores and libraries are available."
   echo "Configuration complete. Run 'make' to build."
 fi
-
