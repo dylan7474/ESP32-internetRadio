@@ -9,9 +9,9 @@ BIN=$(BUILD_DIR)/$(SKETCH_COPY).bin
 
 build:
 	cp $(SKETCH) $(SKETCH_COPY)
-	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) .
+	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) $(SKETCH_COPY)
 	@echo "Firmware binary: $(BIN)"
 	rm $(SKETCH_COPY)
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(SKETCH_COPY)
