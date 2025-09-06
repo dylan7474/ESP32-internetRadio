@@ -1,20 +1,17 @@
-CXX ?= g++
-CXXFLAGS := -std=c++17 $(shell sdl2-config --cflags) $(shell pkg-config --cflags SDL2_ttf fftw3)
-LDFLAGS := $(shell sdl2-config --libs) $(shell pkg-config --libs SDL2_ttf fftw3)
+.DEFAULT_GOAL := build
+FQBN=esp32:esp32:esp32
+SKETCH=iradio_v6_17.ino
+SKETCH_COPY=ESP32-internetRadio.ino
+BUILD_DIR=build
+BIN=$(BUILD_DIR)/$(SKETCH_COPY).bin
 
-SRC := main.cpp
-OBJ := $(SRC:.cpp=.o)
-TARGET := iradio
+.PHONY: build clean
 
-all: $(TARGET)
-
-$(TARGET): $(OBJ)
-	$(CXX) -o $@ $(OBJ) $(LDFLAGS)
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+build:
+	cp $(SKETCH) $(SKETCH_COPY)
+	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) .
+	@echo "Firmware binary: $(BIN)"
+	rm $(SKETCH_COPY)
 
 clean:
-	rm -f $(TARGET) $(OBJ)
-
-.PHONY: all clean
+	rm -rf $(BUILD_DIR)
