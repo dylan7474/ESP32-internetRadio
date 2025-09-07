@@ -1,6 +1,9 @@
 			
 .DEFAULT_GOAL := build
-FQBN=esp32:esp32:esp32
+
+# Use a larger partition scheme so the sketch fits in flash
+FQBN=esp32:esp32:esp32:PartitionScheme=huge_app
+
 SKETCH=ESP32-internetRadio.ino
 BUILD_DIR=build
 BIN=$(BUILD_DIR)/$(SKETCH).bin

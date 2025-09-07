@@ -78,5 +78,8 @@ retry 5 5 arduino-cli lib install "SimpleRotary"
 retry 5 5 arduino-cli lib install "StreamUtils"
 retry 5 5 arduino-cli lib install --git-url https://github.com/schreibfaul1/ESP32-audioI2S.git
 
+# Use a larger partition scheme so the sketch fits in flash
+FQBN="esp32:esp32:esp32:PartitionScheme=huge_app"
+
 echo "✅ Setup complete. Compile with:"
-echo "   arduino-cli compile --fqbn esp32:esp32:esp32 ESP32-internetRadio.ino"
+echo "   arduino-cli compile --fqbn ${FQBN} ESP32-internetRadio.ino"
