@@ -1,21 +1,20 @@
+			
 .DEFAULT_GOAL := build
-FQBN=esp32:esp32:esp32
-SKETCH=iradio_v6_17.ino
-SKETCH_COPY=ESP32-internetRadio.ino
+# Use a larger partition scheme so the sketch fits in flash
+FQBN=esp32:esp32:esp32:PartitionScheme=huge_app
+SKETCH=ESP32-internetRadio.ino
 BUILD_DIR=build
-BIN=$(BUILD_DIR)/$(SKETCH_COPY).bin
+BIN=$(BUILD_DIR)/$(SKETCH).bin
 
 .PHONY: build clean check
 
 build: check
-	cp $(SKETCH) $(SKETCH_COPY)
 	mkdir -p $(BUILD_DIR)
-	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) $(SKETCH_COPY)
+	arduino-cli compile --fqbn $(FQBN) --output-dir $(BUILD_DIR) $(SKETCH)
 	@echo "Firmware binary: $(BIN)"
-	rm $(SKETCH_COPY)
 
 check:
 	./configure
 
 clean:
-	rm -rf $(BUILD_DIR) $(SKETCH_COPY)
+	rm -rf $(BUILD_DIR)
