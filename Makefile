@@ -4,9 +4,9 @@
 # Use a larger partition scheme so the sketch fits in flash
 FQBN=esp32:esp32:esp32:PartitionScheme=huge_app
 
-SKETCH=ESP32-internetRadio.ino
+SKETCH=ESP32-internetRadio/ESP32-internetRadio.ino
 BUILD_DIR=build
-BIN=$(BUILD_DIR)/$(SKETCH).bin
+BIN=$(BUILD_DIR)/$(notdir $(SKETCH)).bin
 
 .PHONY: build clean check
 
